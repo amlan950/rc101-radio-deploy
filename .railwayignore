@@ -1,0 +1,8 @@
+.git
+node_modules
+vendor
+*.zip
+storage/logs/*.log
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*

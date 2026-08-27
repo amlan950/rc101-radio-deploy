@@ -1,0 +1,17 @@
+:root {
+    --primary-blue: #800400;
+    --secondary-blue: #902a00;
+    --accent-blue: #2f3283;
+    --accent-orange: #c841a4;
+    --accent-teal: #2616a2;
+    --warm-white: #fafafa;
+    --light-gray: #000000;
+    --soft-yellow: #0004c5;
+    --light-yellow: #fefcf0;
+    --medium-gray: #dcdfe5;
+    --dark-gray: #ea7171;
+    --text-color: #920100;
+    --border-color: #ffda24;
+    --success-green: #27ae60;
+    --player-height: 80px;
+}

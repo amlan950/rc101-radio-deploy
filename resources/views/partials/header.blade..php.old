@@ -1,0 +1,212 @@
+  <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+              <img src="{{ asset('/Landscape_Logo.png') }}" width="180px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+<a class="nav-link" href="{{ url('/') }}#top">
+    <i class="fas fa-home me-1"></i> Home
+</a>                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#pop-culture-news"><i class="fas fa-newspaper me-1"></i> News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#concerts"><i class="fas fa-music me-1"></i> Concerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#events"><i class="fas fa-calendar-alt me-1"></i> Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link contest-scroll-link" href="#contest-section">
+                            <i class="fas fa-trophy me-1"></i> Contest
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle no-hover" href="#" id="navbarShare" role="button" data-bs-toggle="dropdown" aria-expanded="false" title="Share">
+                            <i class="fas fa-share-alt"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow border-0" aria-labelledby="navbarShare" style="border-radius: 10px;">
+                            <li>
+                                <a class="dropdown-item py-2" href="https://www.facebook.com/sharer/sharer.php?u={{ urlencode(url('/')) }}&quote={{ urlencode(config('app.name') . ' — Listen Live Free!') }}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fab fa-facebook text-primary me-2" style="font-size: 1.2rem;"></i> Facebook
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="https://twitter.com/intent/tweet?url={{ urlencode(url('/')) }}&text={{ urlencode(config('app.name') . ' — Stream the hottest hits live, free! 🎵') }}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fab fa-x-twitter text-dark me-2" style="font-size: 1.2rem;"></i> X (Twitter)
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="https://api.whatsapp.com/send?text={{ urlencode(config('app.name') . ' — Stream the hottest hits live, free! 🎵 ' . url('/')) }}" target="_blank" rel="noopener noreferrer">
+                                    <i class="fab fa-whatsapp text-success me-2" style="font-size: 1.2rem;"></i> WhatsApp
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#" onclick="copyShareLink(event, '{{ url('/') }}', 'Link copied! Paste it on Instagram to share.')">
+                                    <i class="fab fa-instagram text-danger me-2" style="font-size: 1.2rem;"></i> Instagram (Copy Link)
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <a class="dropdown-item py-2" href="#" onclick="copyShareLink(event, '{{ url('/') }}', 'Link copied to clipboard!')">
+                                    <i class="fas fa-link text-secondary me-2" style="font-size: 1.2rem;"></i> Copy Link
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- X / Twitter quick-share icon — always visible in navbar --}}
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="https://twitter.com/intent/tweet?url={{ urlencode(url('/')) }}&text={{ urlencode(config('app.name') . ' — Stream the hottest hits live, free! 🎵') }}"
+                           target="_blank" rel="noopener noreferrer" title="Share on X">
+                            <i class="fab fa-x-twitter" style="font-size: 1.1rem;"></i>
+                        </a>
+                    </li>
+                </ul>
+                <!-- <ul class="navbar-nav">
+                    <li class="nav-item ms-3">
+                        <a class="btn listen-live-btn" href="#" id="navbar-listen-btn" onclick="toggleLiveAudio()">
+                            <i class="fas fa-play me-1" id="navbar-play-icon"></i> Listen Live
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2">
+                        <a class="btn download-app-btn" href="#" id="downloadAppHeaderBtn" data-bs-toggle="modal" data-bs-target="#appDownloadModal">
+                            <i class="fas fa-download me-1"></i> Download App
+                        </a>
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Custom Share Toast -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1080">
+        <div id="shareToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body" id="shareToastMessage">
+                    Link copied to clipboard!
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Radio Player (Hidden) removed to avoid conflict with the one in app.blade.php -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle navbar link clicks
+    document.querySelectorAll('.navbar a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // Skip home link or empty hash
+            if (href === '#top' || href === '#') return;
+            
+            e.preventDefault();
+            
+            // Remove # from href to get the ID
+            const targetId = href.substring(1);
+            if (!targetId) return; // Prevent empty selector queries
+            
+            try {
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                // Get navbar height
+                const navbar = document.querySelector('.navbar');
+                const navbarHeight = navbar.offsetHeight;
+                
+                // Calculate scroll position with offset
+                const elementPosition = targetElement.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+                
+                // Scroll to position
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+                
+                // Update URL
+                history.pushState(null, null, href);
+            }
+            } catch (err) {}
+        });
+    });
+});
+
+function showShareToast(message) {
+    const toastMessage = document.getElementById('shareToastMessage');
+    const toastEl = document.getElementById('shareToast');
+    if (toastMessage && toastEl) {
+        toastMessage.textContent = message || 'Link copied to clipboard!';
+        const toast = new bootstrap.Toast(toastEl, { delay: 3000 });
+        toast.show();
+    }
+}
+
+function copyShareLink(event, url, message) {
+    // Only prevent default if it's the Copy Link button. Instagram needs to open
+    // the tab AND copy the link.
+    if (event && !event.currentTarget.href.includes('instagram.com')) {
+        event.preventDefault();
+    }
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(url)
+            .then(() => showShareToast(message))
+            .catch(() => fallbackCopy(url, message));
+    } else {
+        fallbackCopy(url, message);
+    }
+}
+
+function fallbackCopy(url, message) {
+    const tempInput = document.createElement("input");
+    tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+    tempInput.value = url;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    try {
+        document.execCommand("copy");
+        showShareToast(message);
+    } catch (err) {
+        console.error('Failed to copy', err);
+    }
+    document.body.removeChild(tempInput);
+}
+</script>
+<style>
+/* Disable hover effect on share icon */
+.nav-link.no-hover::after {
+    display: none !important;
+}
+
+/* Add scroll margin to all sections that are targeted */
+#pop-culture-news,
+#concerts,
+#events,
+#contest-section,
+#contact {
+    scroll-margin-top: 150px; /* Adjust this value based on your navbar height */
+}
+@media(max-width: 992px) {
+    #pop-culture-news,
+    #concerts,
+    #events,
+    #contest-section,
+    #contact {
+        scroll-margin-top: 450px; /* Adjust for smaller screens */
+    }
+    #home {
+        scroll-margin-top: 0px; /* Adjust for smaller screens */
+    }
+}
+</style>

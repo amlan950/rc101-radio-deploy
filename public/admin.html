@@ -1,0 +1,1056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>API Management - Jammin' Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Righteous&display=swap"
+        rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #2c3e50;
+            --secondary-blue: #34495e;
+            --accent-blue: #3498db;
+            --accent-orange: #e67e22;
+            --accent-teal: #16a085;
+            --warm-white: #fdfdfd;
+            --light-gray: #f8f9fa;
+            --soft-yellow: #fffef7;
+            --light-yellow: #fefcf0;
+            --medium-gray: #6c757d;
+            --dark-gray: #2c3e50;
+            --text-color: #495057;
+            --border-color: #e9ecef;
+            --success-green: #27ae60;
+            --player-height: 80px;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background: linear-gradient(135deg, var(--soft-yellow) 0%, var(--light-yellow) 50%, var(--warm-white) 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            padding-bottom: var(--player-height);
+            margin: 0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .brand-font {
+            font-family: 'Righteous', cursive;
+        }
+
+        .navbar {
+            padding: 15px 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .nav-link {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+            position: relative;
+            margin: 0 10px;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-blue);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue) !important;
+            border-color: var(--primary-blue) !important;
+            color: var(--warm-white) !important;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-blue) !important;
+            border-color: var(--secondary-blue) !important;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.2) !important;
+        }
+
+        .form-control,
+        .form-select {
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(5px);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: var(--accent-blue);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.15);
+            outline: none;
+        }
+
+        .card {
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.06);
+        }
+
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: var(--warm-white);
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+
+        .admin-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .sticky-player {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: var(--player-height);
+            background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
+            color: white;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            z-index: 1000;
+            box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .player-info {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .mini-player-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 16px;
+        }
+
+        .player-btn {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .player-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        footer {
+            background: var(--dark-gray);
+            color: var(--light-gray);
+            padding: 60px 0 30px;
+        }
+
+        .footer-column h3 {
+            color: var(--warm-white);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-blue);
+        }
+
+        .footer-links a {
+            color: var(--light-gray);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-blue);
+            transform: translateX(3px);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--warm-white);
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-blue);
+            transform: translateY(-5px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="/Landscape_Logo.png" width="180px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/"><i class="fas fa-home me-1"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#news"><i class="fas fa-newspaper me-1"></i> News</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#concerts"><i class="fas fa-music me-1"></i> Concerts</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#events"><i class="fas fa-calendar-alt me-1"></i> Events</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/#contact"><i class="fas fa-envelope me-1"></i> Contact</a>
+                    </li>
+                </ul>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="navbar-listen-btn" onclick="toggleLiveAudio()">
+                        <i class="fas fa-play me-1" id="navbar-play-icon"></i> Listen Live
+                    </a>
+                </li>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Live Radio Player (Hidden) -->
+    <div style="display: none;">
+        <audio id="live-audio" preload="none" crossorigin="anonymous">
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h1 class="brand-font">🔧 API Management</h1>
+                            <p class="mb-0">Configure and manage API keys for the radio station</p>
+                        </div>
+                        <a href="/" class="btn btn-outline-light">← Back to Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Admin Content -->
+    <main>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-12">
+                    <!-- Success/Error Messages -->
+                    <div id="alert-container"></div>
+
+                    <!-- Security Notice & Options -->
+                    <div class="alert alert-info">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <i class="fas fa-shield-alt"></i>
+                                <strong>Security Notice:</strong> API keys are securely stored and hidden by default.
+                            </div>
+                            <div class="btn-group btn-group-sm">
+                                <button type="button" class="btn btn-outline-secondary" onclick="showSecurityOptions()">
+                                    <i class="fas fa-cog"></i> Security Options
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Security Options Panel -->
+                    <div class="card mb-3" id="securityOptionsPanel" style="display: none;">
+                        <div class="card-header">
+                            <h5><i class="fas fa-shield-alt"></i> Security Options</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="autoHideValues" checked>
+                                        <label class="form-check-label" for="autoHideValues">
+                                            Auto-hide values after 30 seconds
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="showFullValues">
+                                        <label class="form-check-label" for="showFullValues">
+                                            Show full values (instead of masked)
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12">
+                                    <small class="text-muted">
+                                        <i class="fas fa-info-circle"></i>
+                                        These settings only affect the current session and are not saved.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add/Edit API Form -->
+                    <div class="card mb-5">
+                        <div class="card-header">
+                            <h3>Add/Update API Configuration</h3>
+                        </div>
+                        <div class="card-body">
+                            <form id="apiForm">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="name" class="form-label">API Name</label>
+                                        <select class="form-select" id="name" name="name" required>
+                                            <option value="">Select API Type</option>
+                                            <option value="news_api">News API</option>
+                                            <option value="bandsintown_api">Bandsintown API</option>
+                                            <option value="spotify_api">Spotify API</option>
+                                            <option value="youtube_api">YouTube API</option>
+                                            <option value="lastfm_api">Last.fm API</option>
+                                            <option value="ticketmaster_api">Ticketmaster API</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="type" class="form-label">Type</label>
+                                        <select class="form-select" id="type" name="type" required>
+                                            <option value="api_key">API Key</option>
+                                            <option value="endpoint">Endpoint URL</option>
+                                            <option value="token">Access Token</option>
+                                            <option value="secret">Secret Key</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="value" class="form-label">API Key/URL/Token</label>
+                                    <textarea class="form-control" id="value" name="value" rows="3"
+                                        placeholder="Paste your API key, endpoint URL, or token here..." required
+                                        minlength="10"></textarea>
+                                    <div class="form-text">
+                                        <i class="fas fa-shield-alt text-warning"></i>
+                                        API values are securely stored and masked in the interface.
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description (Optional)</label>
+                                    <input type="text" class="form-control" id="description" name="description"
+                                        placeholder="Brief description of this API...">
+                                </div>
+                                <button type="submit" class="btn btn-primary" id="saveBtn">💾 Save API</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Existing APIs List -->
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3>Configured APIs</h3>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="showApiValues"
+                                    onchange="toggleApiValues()">
+                                <label class="form-check-label" for="showApiValues">
+                                    <i class="fas fa-eye"></i> Show API Values
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="apis-container">
+                                <div class="text-center py-5" id="no-apis-message">
+                                    <h4 class="text-muted">No APIs configured yet</h4>
+                                    <p class="text-muted">Add your first API configuration using the form above.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-md-4">
+                    <div class="footer-column">
+                        <h3 class="brand-font">Radio Station</h3>
+                        <p>Your favorite source for music, news, and entertainment. Tune in 24/7 for the best
+                            experience.</p>
+                        <div class="social-links">
+                            <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+                            <a href="#" title="YouTube"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="footer-column">
+                        <h3>Quick Links</h3>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="/"><i class="fas fa-chevron-right me-2"></i> Home</a></li>
+                            <li><a href="/#news"><i class="fas fa-chevron-right me-2"></i> News</a></li>
+                            <li><a href="/#concerts"><i class="fas fa-chevron-right me-2"></i> Concerts</a></li>
+                            <li><a href="/#events"><i class="fas fa-chevron-right me-2"></i> Events</a></li>
+                            <li><a href="/#contact"><i class="fas fa-chevron-right me-2"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="footer-column">
+                        <h3>Contact Info</h3>
+                        <ul class="list-unstyled footer-links">
+                            <li><a href="#"><i class="fas fa-map-marker-alt me-2"></i> 123 Radio Street, City,
+                                    Country</a></li>
+                            <li><a href="tel:+11234567890"><i class="fas fa-phone-alt me-2"></i> +1 (123) 456-7890</a>
+                            </li>
+                            <li><a href="mailto:info@radiostation.com"><i class="fas fa-envelope me-2"></i>
+                                    info@radiostation.com</a></li>
+                            <li><a href="#"><i class="fas fa-broadcast-tower me-2"></i> Frequency: 98.5 FM</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="copyright">
+                &copy; 2023 Radio Station. All Rights Reserved.
+            </div>
+        </div>
+    </footer>
+
+
+
+    <div class="floating-request-btn">
+    <button class="request-btn" id="openRequestModalGlobal">
+        <i class="fas fa-headphones"></i> Request a Song
+    </button>
+</div>
+
+    <!-- Sticky Player -->
+    <div class="sticky-player" id="sticky-player">
+        <div class="player-controls">
+            <div class="player-info">
+                <div class="mini-player-icon">
+                    <i class="fas fa-play" id="mini-play-icon"></i>
+                </div>
+                <div>
+                    <div class="player-title">Radio Station Live</div>
+                    <div class="player-song" id="mini-song">Song Title - Artist</div>
+                </div>
+            </div>
+            <div class="player-buttons">
+                <button class="player-btn" id="prev-btn" title="Previous">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="player-btn" id="play-btn" title="Play/Pause">
+                    <i class="fas fa-play" id="play-icon"></i>
+                </button>
+                <button class="player-btn" id="next-btn" title="Next">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+                <button class="player-btn minimize-btn" id="minimize-btn" title="Minimize">
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // API Management functionality
+        let apis = [];
+        let hideTimeout;
+        let csrfToken = '';
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchCSRFToken();
+            loadApis();
+            setupEventListeners();
+            setupAudioPlayer();
+        });
+
+        // Fetch CSRF token for Laravel requests
+        async function fetchCSRFToken() {
+            try {
+                console.log('Fetching CSRF token...');
+                // Try to get CSRF token from a simple endpoint
+                const response = await fetch('/csrf-token', {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                console.log('CSRF token response status:', response.status);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    csrfToken = data.csrf_token;
+                    console.log('CSRF token fetched successfully:', csrfToken ? 'Yes' : 'No');
+                } else {
+                    console.log('CSRF endpoint failed, trying fallback...');
+                    // Fallback: try to extract from main page
+                    const mainResponse = await fetch('/');
+                    const text = await mainResponse.text();
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(text, 'text/html');
+                    const tokenElement = doc.querySelector('meta[name="csrf-token"]');
+                    if (tokenElement) {
+                        csrfToken = tokenElement.getAttribute('content');
+                        console.log('CSRF token from fallback:', csrfToken ? 'Yes' : 'No');
+                    } else {
+                        console.log('No CSRF token found in fallback');
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch CSRF token:', error);
+            }
+        }
+
+        function setupEventListeners() {
+            // Form submission
+            document.getElementById('apiForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                saveApi();
+            });
+
+            // Client-side validation
+            document.getElementById('value').addEventListener('input', function () {
+                const value = this.value.trim();
+                const saveBtn = document.getElementById('saveBtn');
+
+                if (value.length < 10) {
+                    this.classList.add('is-invalid');
+                    saveBtn.disabled = true;
+                } else {
+                    this.classList.remove('is-invalid');
+                    saveBtn.disabled = false;
+                }
+            });
+
+            // Add warning when showing values
+            document.getElementById('showApiValues').addEventListener('change', function () {
+                if (this.checked) {
+                    showNotification('⚠️ API values are now visible. They will be hidden automatically for security.', 'warning');
+                }
+            });
+        }
+
+        function setupAudioPlayer() {
+            const liveAudio = document.getElementById('live-audio');
+            const navbarPlayIcon = document.getElementById('navbar-play-icon');
+            const playBtn = document.getElementById('play-btn');
+            const playIcon = document.getElementById('play-icon');
+            const miniPlayIcon = document.getElementById('mini-play-icon');
+            const minimizeBtn = document.getElementById('minimize-btn');
+            const stickyPlayer = document.getElementById('sticky-player');
+
+            // Update all play/pause icons when audio state changes
+            if (liveAudio) {
+                liveAudio.addEventListener('play', function () {
+                    if (navbarPlayIcon) navbarPlayIcon.className = "fas fa-pause me-1";
+                    if (playIcon) playIcon.className = "fas fa-pause";
+                    if (miniPlayIcon) miniPlayIcon.className = "fas fa-pause";
+                });
+
+                liveAudio.addEventListener('pause', function () {
+                    if (navbarPlayIcon) navbarPlayIcon.className = "fas fa-play me-1";
+                    if (playIcon) playIcon.className = "fas fa-play";
+                    if (miniPlayIcon) miniPlayIcon.className = "fas fa-play";
+                });
+            }
+
+            // Connect sticky player buttons to live audio
+            if (playBtn && liveAudio) {
+                playBtn.addEventListener('click', function () {
+                    toggleLiveAudio();
+                });
+            }
+
+            if (miniPlayIcon && liveAudio) {
+                miniPlayIcon.addEventListener('click', function () {
+                    toggleLiveAudio();
+                });
+            }
+
+            // Minimize/Expand sticky player
+            if (minimizeBtn && stickyPlayer) {
+                let isMinimized = false;
+                minimizeBtn.addEventListener('click', function () {
+                    isMinimized = !isMinimized;
+                    if (isMinimized) {
+                        stickyPlayer.classList.add('player-minimized');
+                        minimizeBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+                        minimizeBtn.setAttribute('title', 'Expand');
+                    } else {
+                        stickyPlayer.classList.remove('player-minimized');
+                        minimizeBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+                        minimizeBtn.setAttribute('title', 'Minimize');
+                    }
+                });
+            }
+        }
+
+        // Live Audio Player Control Function
+function toggleLiveAudio() {
+            const audio = document.getElementById('live-audio');
+            const stickyPlayer = document.getElementById('sticky-player');
+            
+            if (!audio) {
+                console.error('Audio element not found');
+                return;
+            }
+
+            if (audio.paused) {
+                userPaused = false;
+                systemPaused = false;
+                savePlayingIntent(true);
+                audio.load();
+                audio.play().then(() => {
+                    console.log('Audio playback started');
+                    audioPersistenceManager.saveAudioState();
+                    togglePlayerDisplay(true);
+                    if (stickyPlayer) {
+                        stickyPlayer.style.display = 'flex';
+                    }
+                }).catch(error => {
+                    console.error('Error playing audio:', error);
+                });
+            } else {
+                userPaused = true;
+                systemPaused = false;
+                savePlayingIntent(false);
+                audio.pause();
+                console.log('Audio playback paused by user');
+                audioPersistenceManager.saveAudioState();
+                togglePlayerDisplay(false);
+            }
+        }
+
+        // API Management Functions
+        async function saveApi() {
+            const form = document.getElementById('apiForm');
+            const formData = new FormData(form);
+
+            // Validate
+            if (!formData.get('name') || !formData.get('type') || !formData.get('value')) {
+                showNotification('Please fill in all required fields.', 'danger');
+                return;
+            }
+
+            if (formData.get('value').length < 10) {
+                showNotification('API value must be at least 10 characters long.', 'danger');
+                return;
+            }
+
+            try {
+                // Add CSRF token
+                formData.append('_token', csrfToken);
+
+                console.log('Submitting form with CSRF token:', csrfToken);
+
+                const response = await fetch('/admin/apis', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response content-type:', response.headers.get('content-type'));
+
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    const data = await response.json();
+                    console.log('JSON response:', data);
+
+                    if (response.ok && data.success) {
+                        showNotification(data.message || 'API saved successfully!', 'success');
+                        form.reset();
+                        loadApis();
+                    } else {
+                        showNotification(data.message || 'Failed to save API', 'danger');
+                    }
+                } else {
+                    // Response is HTML, likely a validation error or redirect
+                    const htmlText = await response.text();
+                    console.log('HTML response:', htmlText);
+
+                    if (response.status === 422) {
+                        showNotification('Validation error: Please check your input', 'danger');
+                    } else if (response.status === 419) {
+                        showNotification('Session expired. Please refresh the page.', 'danger');
+                        // Refresh CSRF token
+                        await fetchCSRFToken();
+                    } else {
+                        showNotification('Server error: ' + response.status, 'danger');
+                    }
+                }
+            } catch (error) {
+                console.error('Save API error:', error);
+                showNotification('Failed to save API: ' + error.message, 'danger');
+            }
+        }
+
+        async function loadApis() {
+            const container = document.getElementById('apis-container');
+            const noApisMessage = document.getElementById('no-apis-message');
+
+            console.log('Loading APIs...');
+
+            try {
+                const response = await fetch('/admin/apis', {
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers.get('content-type'));
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Received API data:', data);
+                    console.log('API names in database:', data.map(api => api.name));
+                    console.log('NewsController expects: news_api');
+                    console.log('ConcertController expects: ticketmaster_api, eventbrite_api');
+
+                    apis = data.map(api => ({
+                        id: api.id,
+                        name: api.name,
+                        type: api.type,
+                        value: api.masked_value || '****hidden****',
+                        description: api.description || '',
+                        is_active: api.is_active,
+                        updated_at: api.updated_at
+                    }));
+
+                    console.log('Mapped APIs:', apis);
+                    displayApis();
+                } else {
+                    console.error('Failed to load APIs:', response.status, response.statusText);
+                    const errorText = await response.text();
+                    console.error('Error response:', errorText);
+                    apis = [];
+                    displayApis();
+                }
+            } catch (error) {
+                console.error('Load APIs error:', error);
+                apis = [];
+                displayApis();
+            }
+        }
+
+        function displayApis() {
+            console.log('displayApis called with', apis.length, 'APIs');
+            const container = document.getElementById('apis-container');
+            const noApisMessage = document.getElementById('no-apis-message');
+
+            console.log('Container element:', container);
+            console.log('No APIs message element:', noApisMessage);
+
+            if (apis.length === 0) {
+                console.log('No APIs to display, showing empty message');
+                if (noApisMessage) {
+                    noApisMessage.style.display = 'block';
+                }
+                if (container) {
+                    container.innerHTML = '';
+                    if (noApisMessage) {
+                        container.appendChild(noApisMessage);
+                    }
+                }
+                return;
+            }
+
+            console.log('Displaying', apis.length, 'APIs');
+            if (noApisMessage) {
+                noApisMessage.style.display = 'none';
+            }
+
+            const table = document.createElement('div');
+            table.className = 'table-responsive';
+            table.innerHTML = `
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Value</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Updated</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="apis-table-body">
+                    </tbody>
+                </table>
+            `;
+
+            if (container) {
+                container.innerHTML = '';
+                container.appendChild(table);
+
+                const tbody = document.getElementById('apis-table-body');
+                console.log('Table body element:', tbody);
+
+                apis.forEach((api, index) => {
+                    console.log('Creating row for API', index, ':', api);
+                    const row = createApiRow(api);
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        function createApiRow(api) {
+            const tr = document.createElement('tr');
+            const maskedValue = api.value.substring(0, 4) + '*'.repeat(Math.min(api.value.length - 8, 20)) + api.value.substring(api.value.length - 4);
+
+            tr.innerHTML = `
+                <td><strong>${api.name.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</strong></td>
+                <td><span class="badge bg-info">${api.type.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())}</span></td>
+                <td>
+                    <div class="api-value-container">
+                        <div class="api-value-hidden">
+                            <span class="badge bg-secondary">
+                                <i class="fas fa-lock"></i> Hidden
+                            </span>
+                            <i class="fas fa-check-circle text-success ms-1" title="API value configured"></i>
+                        </div>
+                        <div class="api-value-shown" style="display: none;">
+                            <code class="text-truncate d-inline-block" style="max-width: 200px;">
+                                ${maskedValue}
+                            </code>
+                            <i class="fas fa-check-circle text-success ms-1" title="API value configured"></i>
+                        </div>
+                    </div>
+                </td>
+                <td>${api.description || 'No description'}</td>
+                <td>
+                    <span class="badge ${api.is_active ? 'bg-success' : 'bg-secondary'}">
+                        ${api.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                </td>
+                <td>${new Date(api.updated_at).toLocaleDateString()}</td>
+                <td>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-outline-warning" onclick="toggleApiStatus(${api.id})">
+                            ${api.is_active ? '⏸️' : '▶️'}
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" onclick="deleteApi(${api.id})">
+                            🗑️
+                        </button>
+                    </div>
+                </td>
+            `;
+
+            return tr;
+        }
+
+        async function toggleApiStatus(id) {
+            try {
+                const response = await fetch(`/admin/apis/${id}/toggle`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok && data.success) {
+                    showNotification(data.message || 'API status updated successfully!', 'success');
+                    loadApis();
+                } else {
+                    showNotification(data.message || 'Failed to update API status', 'danger');
+                }
+            } catch (error) {
+                console.error('Toggle API error:', error);
+                showNotification('Failed to update API status: ' + error.message, 'danger');
+            }
+        }
+
+        async function deleteApi(id) {
+            if (confirm('Are you sure you want to delete this API?')) {
+                try {
+                    const response = await fetch(`/admin/apis/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': csrfToken,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok && data.success) {
+                        showNotification(data.message || 'API deleted successfully!', 'success');
+                        loadApis();
+                    } else {
+                        showNotification(data.message || 'Failed to delete API', 'danger');
+                    }
+                } catch (error) {
+                    console.error('Delete API error:', error);
+                    showNotification('Failed to delete API: ' + error.message, 'danger');
+                }
+            }
+        }
+
+        function showSecurityOptions() {
+            const panel = document.getElementById('securityOptionsPanel');
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function toggleApiValues() {
+            const checkbox = document.getElementById('showApiValues');
+            const hiddenElements = document.querySelectorAll('.api-value-hidden');
+            const shownElements = document.querySelectorAll('.api-value-shown');
+            const autoHide = document.getElementById('autoHideValues').checked;
+
+            // Clear existing timeout
+            if (hideTimeout) {
+                clearTimeout(hideTimeout);
+            }
+
+            if (checkbox.checked) {
+                // Show values (masked or full based on setting)
+                hiddenElements.forEach(el => el.style.display = 'none');
+                shownElements.forEach(el => el.style.display = 'block');
+
+                // Auto-hide if enabled
+                if (autoHide) {
+                    hideTimeout = setTimeout(() => {
+                        checkbox.checked = false;
+                        hiddenElements.forEach(el => el.style.display = 'block');
+                        shownElements.forEach(el => el.style.display = 'none');
+                        showNotification('API values automatically hidden for security.', 'info');
+                    }, 30000);
+                }
+            } else {
+                // Hide values completely
+                hiddenElements.forEach(el => el.style.display = 'block');
+                shownElements.forEach(el => el.style.display = 'none');
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const alertContainer = document.getElementById('alert-container');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                <i class="fas fa-info-circle"></i>
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+
+            alertContainer.appendChild(alert);
+
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+    </script>
+</body>
+
+</html>
